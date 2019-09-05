@@ -6,7 +6,7 @@
 #include <stdlib.h> 
 #include <string.h> 
 #include <sys/socket.h> 
-#define MAX 80 
+#define MAX 255 
 #define PORT 8080 
 #define SA struct sockaddr 
 void func(int sockfd) 
@@ -15,18 +15,17 @@ void func(int sockfd)
 	int n; 
 	for (;;) { 
 		bzero(buff, sizeof(buff)); 
-		printf("\nChoose an operation: \n  1. put ln,fn,mi,SID,GPA\n  2. get lname\n  3. get fname\n  4. get SID\n  5. get GPA\n 6. delete (SID)\n 7. stop\nChoice: ");	
+		printf("\nChoose an operation: \n  1. put ln,fn,mi,SID,GPA\n  2. get lname\n  3. get fname\n  4. get SID\n  5. get GPA\n 6. delete (SID)\n 7. exit\nChoice: ");	
 		n = 0; 
-		while ((buff[n++] = getchar()) != '\n') 
-			; 
+		while ((buff[n++] = getchar()) != '\n'); 
 		write(sockfd, buff, sizeof(buff)); 
 		bzero(buff, sizeof(buff)); 
-		read(sockfd, buff, sizeof(buff)); 
-		printf("From Server : %s", buff); 
+		read(sockfd, buff, sizeof(buff)); 	
 		if ((strncmp(buff, "exit", 4)) == 0) { 
-			printf("Client Exit...\n"); 
+			printf("\n\tClient Exit...\n\n"); 
 			break; 
-		} 
+		}
+		printf("\n\t%s\n", buff);  
 	} 
 } 
 

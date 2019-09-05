@@ -7,7 +7,7 @@
 #include <string.h> 
 #include <sys/socket.h> 
 #include <sys/types.h> 
-#define MAX 80 
+#define MAX 255 
 #define PORT 8080 
 #define SA struct sockaddr 
 
@@ -19,15 +19,14 @@ struct student {
 };
 
 typedef struct student SREC;
-SREC *ptr, *front, *newnode, *tmp;
+SREC *ptr, *front, *newnode;
 
 char *printRecords() {
 	char *buffer = malloc(MAX);
 	int n = 0;
 	if (front == NULL)
     {
-        strncpy(buffer, "**No Students in the database to display**\n", 44);
-		printf("%s\n", buffer);
+        strncpy(buffer, "**No Students in the database to display**", 44);	
 		return buffer;
 	}
     else
@@ -71,13 +70,12 @@ char *fnameSort(SREC **head)
 	return printRecords();
 }
 
-void lnameSort(SREC **head)
+char *lnameSort(SREC **head)
 {
 	int done = 0;
 
     if (front == NULL) {
-        printRecords();
-		return;
+		return printRecords();
     }
     
 	while (!done) {
@@ -100,16 +98,15 @@ void lnameSort(SREC **head)
             nx = nx->next;
         }
     }
-    printRecords();
+    return printRecords();
 }
 
-void GPAsort () {
+char *GPAsort () {
     int tmp;
     SREC *temp;
 
     if (front == NULL) {
-		printRecords();
-		return; 
+		return printRecords(); 
     }
     else
     {
@@ -125,7 +122,7 @@ void GPAsort () {
                 }
             }
         }
-        printRecords();
+        return printRecords();
     }
 }
 
@@ -134,7 +131,7 @@ int deleteRecord (SREC **front, char *command) {
 	int i = 0;
 
 	if (!front || !(*front))
-        return 0;
+        return 1;
 	
 	char *c = strtok(command, " ");
 
@@ -148,35 +145,32 @@ int deleteRecord (SREC **front, char *command) {
     SREC* tmp = *front;
     SREC* prev = NULL;
 
-    while (tmp->SID != SID && tmp->next != NULL)
-    {
+    while (tmp->SID != SID && tmp->next != NULL) {
         prev = tmp;
         tmp = tmp->next;
     }
 
-    if (tmp->SID == SID)
-    {
-        if (prev)
-        {
+    if (tmp->SID == SID) {
+        if (prev) {
             prev->next = tmp->next;
         }
-        else
-        {
+        else {
             *front = tmp->next;
         }
         free(tmp);
-        return SID;
-    }
-    return 0;
+        return 0;
+    } else
+		return 1;
+	
+	return 0;
 }
 
-void SIDsort () {
+char *SIDsort () {
     int tmp;
     SREC *temp;
 
     if (front == NULL) {
-		printRecords();
-		return; 
+		return printRecords(); 
     } else {
         for (ptr = front;ptr != NULL;ptr = ptr->next)
         {
@@ -190,7 +184,7 @@ void SIDsort () {
                 }
             }
         }
-        printRecords();
+        return printRecords();
     }
 }
 
@@ -200,22 +194,24 @@ void error(char *msg)
     exit(1);
 }
 
-void insert (SREC **front, char *command) {
+int insert (SREC **front, char *command) {
 	char *temp[10];
 	int i = 0;
 
 	newnode = (SREC *)malloc(sizeof(SREC));
 	char *c = strtok(command, " ");
 
+// tokenize string
     while (c != NULL) {
         temp[i++] = c;
         c = strtok(NULL, " ");
     }
-	
-	if (newnode == NULL) {
-        printf("Allocation Failed.\n");
-        exit(1);
-    } else {	
+		
+	if (newnode == NULL) { 
+        return 1;									// Allocation Failed
+    } else if (i != 6) {
+		return 2;									// Not enough or too many arguments
+	} else {	
 		newnode->lname = strdup(temp[1]);
         newnode->fname = strdup(temp[2]);
         newnode->initial = strdup(temp[3]);
@@ -224,6 +220,7 @@ void insert (SREC **front, char *command) {
         newnode->next = *front;
         *front = newnode; 
 	}
+	return 0;
 }
 
 void func(int sockfd) 
@@ -234,7 +231,8 @@ void func(int sockfd)
 	// infinite loop for chat 
 	for (;;) {
 
-		bzero(buff, MAX); 
+		bzero(buff, MAX);
+		bzero(bufferPtr, MAX); 
 
 		// read the message from client and copy it in buffer 
 		read(sockfd, buff, sizeof(buff)); 
@@ -242,33 +240,36 @@ void func(int sockfd)
 		printf("From client: %s", buff); 
 		
 		if (strncmp("put", buff, 3) == 0) {	
-			insert(&front, buff);
-			// buffer == message to send back
-			write(sockfd, buff, sizeof(buff));
-			puts("\nRecord Added");
+			int j = insert(&front, buff);
+			if (j == 1) {
+				write(sockfd, "Allocation failed.", 18);
+			} else if (j == 2) {
+				write(sockfd, "Please input a new record in the form: (last name) (first name) (M.I.) (student ID) (GPA)", 89);
+			} else 
+				write(sockfd, "Record successfully added to the database.", 42);
 		} else if (strncmp(buff, "get lname", 9) == 0) {
-			lnameSort(&front);	
-			write(sockfd, buff, sizeof(buff)); 	
+			bufferPtr = lnameSort(&front);	
+			write(sockfd, bufferPtr, MAX); 	
 		} else if (strncmp("get fname", buff, 9) == 0) {
 			bufferPtr = fnameSort(&front);
-			printf("%s\n", bufferPtr);
 			write(sockfd, bufferPtr, MAX); 	
 		} else if (strncmp("get SID", buff, 7) == 0) {
-			SIDsort();
-			write(sockfd, buff, sizeof(buff)); 	
+			bufferPtr = SIDsort();
+			write(sockfd, bufferPtr, MAX); 	
 		} else if (strncmp("get GPA", buff, 7) == 0) {
-			GPAsort();
-			write(sockfd, buff, sizeof(buff)); 	
+			bufferPtr = GPAsort();
+			write(sockfd, bufferPtr, MAX); 	
 		} else if (strncmp("delete", buff, 6) == 0) {
-			deleteRecord(&front, buff);
-			write(sockfd, buff, sizeof(buff));
+			if (deleteRecord(&front, buff) == 0) {
+				write(sockfd, "Record deleted successfully.", 28);
+			} else
+				write(sockfd, "That record could not be deleted because it does not exist.", 59);
 		} else if (strncmp("exit", buff, 4) == 0) { 
 			write(sockfd, buff, sizeof(buff)); 
 			printf("Server Exit...\n"); 
 			break; 
 		} else {
-			strncpy(buff, "Sorry, that's not an option. Try again.\n", 41); 
-			write(sockfd, buff, sizeof(buff)); 	
+			write(sockfd, "Sorry, that's not an option. Try again.", 39); 	
 			continue;
 		}	
 	} 
