@@ -15,7 +15,7 @@ void func(int sockfd)
 	int n; 
 	for (;;) { 
 		bzero(buff, sizeof(buff)); 
-		printf("Choose an operation: \n  1. put ln,fn,mi,SID,GPA\n  2. get lname\n  3. get fname\n  4. get SID\n  5. get GPA\n 6. delete (SID)\n 7. stop\nChoice: ");	
+		printf("\nChoose an operation: \n  1. put ln,fn,mi,SID,GPA\n  2. get lname\n  3. get fname\n  4. get SID\n  5. get GPA\n 6. delete (SID)\n 7. stop\nChoice: ");	
 		n = 0; 
 		while ((buff[n++] = getchar()) != '\n') 
 			; 

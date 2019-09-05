@@ -21,27 +21,31 @@ struct student {
 typedef struct student SREC;
 SREC *ptr, *front, *newnode, *tmp;
 
-void printRecords() {
-    if (front == NULL)
+char *printRecords() {
+	char *buffer = malloc(MAX);
+	int n = 0;
+	if (front == NULL)
     {
-        printf("**No Students in the database to display**\n");
+        strncpy(buffer, "**No Students in the database to display**\n", 44);
+		printf("%s\n", buffer);
+		return buffer;
 	}
     else
     {
         for (ptr = front;ptr != NULL;ptr = ptr->next)
-        {
-           printf("\n%s\n%s\n%s\n%d\n%f\n", ptr->fname, ptr->initial, ptr->lname, ptr->SID, ptr->GPA);
-        }
+        { 
+			snprintf(buffer + strlen(buffer), MAX, "\n%s\n%s\n%s\n%d\n%f\n", ptr->fname, ptr->initial, ptr->lname, ptr->SID, ptr->GPA);	
+		}
     }
+	return buffer;
 }
 
-void fnameSort(SREC **head)
+char *fnameSort(SREC **head)
 {   
 	int done = 0;
 
     if (front == NULL) {
-        printRecords();
-		return;
+        return printRecords();
     }
     
 	while (!done) {
@@ -64,7 +68,7 @@ void fnameSort(SREC **head)
             nx = nx->next;
         }
     }
-	printRecords();
+	return printRecords();
 }
 
 void lnameSort(SREC **head)
@@ -224,9 +228,9 @@ void insert (SREC **front, char *command) {
 
 void func(int sockfd) 
 { 
-	char buff[MAX]; 
+	char buff[MAX];
 	int i = 0; 	
-	
+	char *bufferPtr = malloc(MAX);	
 	// infinite loop for chat 
 	for (;;) {
 
@@ -246,8 +250,9 @@ void func(int sockfd)
 			lnameSort(&front);	
 			write(sockfd, buff, sizeof(buff)); 	
 		} else if (strncmp("get fname", buff, 9) == 0) {
-			fnameSort(&front);
-			write(sockfd, buff, sizeof(buff)); 	
+			bufferPtr = fnameSort(&front);
+			printf("%s\n", bufferPtr);
+			write(sockfd, bufferPtr, MAX); 	
 		} else if (strncmp("get SID", buff, 7) == 0) {
 			SIDsort();
 			write(sockfd, buff, sizeof(buff)); 	
@@ -262,7 +267,8 @@ void func(int sockfd)
 			printf("Server Exit...\n"); 
 			break; 
 		} else {
-			// write error message
+			strncpy(buff, "Sorry, that's not an option. Try again.\n", 41); 
+			write(sockfd, buff, sizeof(buff)); 	
 			continue;
 		}	
 	} 
