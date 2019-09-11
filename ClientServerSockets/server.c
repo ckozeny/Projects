@@ -7,7 +7,7 @@
 #include <string.h> 
 #include <sys/socket.h> 
 #include <sys/types.h> 
-#define MAX 255 
+#define MAX 1025 
 #define PORT 8080 
 #define SA struct sockaddr 
 
@@ -19,11 +19,12 @@ struct student {
 };
 
 typedef struct student SREC;
-SREC *ptr, *front, *newnode;
+SREC *front, *ptr;
 
 char *printRecords() {
 	char *buffer = malloc(MAX);
 	int n = 0;
+
 	if (front == NULL)
     {
         strncpy(buffer, "**No Students in the database to display**", 44);	
@@ -198,7 +199,7 @@ int insert (SREC **front, char *command) {
 	char *temp[10];
 	int i = 0;
 
-	newnode = (SREC *)malloc(sizeof(SREC));
+	SREC *newnode = (SREC *)malloc(sizeof(SREC));
 	char *c = strtok(command, " ");
 
 // tokenize string
@@ -228,6 +229,7 @@ void func(int sockfd)
 	char buff[MAX];
 	int i = 0; 	
 	char *bufferPtr = malloc(MAX);	
+
 	// infinite loop for chat 
 	for (;;) {
 
