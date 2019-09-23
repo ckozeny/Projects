@@ -10,7 +10,7 @@ public class octalToDecimal {
 		
 		while(userRequest < 1 || userRequest > 10000000)          // Only accept within this range
         {
-            System.out.print("\nEnter up to an 8-digit octal number and I'll convert it: ");
+            System.out.print("\nPlease enter a number from 1 to 9999999 to convert: ");
 
             if (get.hasNextInt()) 
 			{             						// Get input and validate that it is within constraints
@@ -22,7 +22,7 @@ public class octalToDecimal {
         }
 
         // Final print statement with a call to the legwork function
-       	System.out.printf  ("The octal number you entered, %d, is %d converted to decimal.\n", userRequest, convertToDecimal(userRequest));
+       	System.out.printf  ("\033[3m\n  The octal number you entered, %d, is %d converted to decimal.\n\n\033[0m", userRequest, convertToDecimal(userRequest));
     
     }
     // Function to convert the octal value into decimal and return the result 

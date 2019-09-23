@@ -15,9 +15,9 @@ public class birthdayPercentage {
 		int largestPosition = 0, smallestPosition = 0;			// ints for the position of highest and lowest amounts
 		double percentage = 0;
        
-    	System.out.println ("\n\tThe CHI Health Center in Omaha, Nebraska has a capacity of 18,975 patrons." 
-							+ "\n\tThe probability that each has a birthday on a specific day is listed below."
-							+ "\n\tA list of occupants in the CHI Health Center and their birthdays:\n");
+    	System.out.println ("\nThe CHI Health Center in Omaha, Nebraska has a capacity of 18,975 patrons." 
+							+ "\nThe probability that each has a birthday on a specific day is listed below."
+							+ "\nA list of occupants in the CHI Health Center and their birthdays:\n");
         
 		for (int i = 0; i<Birthdays.length; i++)		// Loop through all of the 18,975 birthdays
 		{	
