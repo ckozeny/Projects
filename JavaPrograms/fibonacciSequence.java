@@ -1,9 +1,9 @@
-import java.util.Scanner;
-
 // This is a program that prompts the user for which number of the fibonacci sequence they would like, and
 // prints the sequence up to that point.
 //
 // Run the program by first compiling with "javac fibonacciSequence" followed by "java fibonacciSequence"
+
+import java.util.Scanner;
 
 public class fibonacciSequence
 {
