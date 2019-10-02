@@ -58,8 +58,10 @@ public class mainMenu {
 					switch (userRequest) {
 						case 1:
 							bp.main(null);				// birthdayPercentages.java
+							break;
 						case 2:
 							fs.main(null);				// fibonacciSequence.java
+							break;
 						case 3:
 							userRequest = -1;			// Go back a menu
 							continue;
