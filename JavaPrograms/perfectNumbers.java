@@ -9,7 +9,8 @@ public class perfectNumbers
         int userRequest, perfectNumber, numDone;							// Initialize input and counter variables
 		userRequest = numDone = 0;
 		perfectNumber = -1;
-		
+		inputHelpers helpers = new inputHelpers();							// Helper to validate input
+	
 		System.out.println("\nHello! This program takes your input and confirms"
 							+ "\nwhether it is a perfect number or not. A perfect"
 							+ "\nnumber exists when all of its multiples add up"
@@ -18,7 +19,7 @@ public class perfectNumbers
         while (userRequest < 1 || userRequest > 25) 						// Input is within bounds
 		{ 
 			System.out.print("\tHow many numbers would you like to try (1-25)?: ");
-			userRequest = getValue();										// Validate input with helper function
+			userRequest = helpers.getIntInput();										// Validate input with helper function
 		}
 		
 		while (numDone < userRequest)										// Loop as many times as the user requests
@@ -27,7 +28,7 @@ public class perfectNumbers
 			while (perfectNumber < 0 || perfectNumber > 10000)				// Input is within bounds
 			{
 				System.out.print("\n\tEnter the number you would like to try (1-10000): ");
-        		perfectNumber = getValue();									// Validate input with helper function
+        		perfectNumber = helpers.getIntInput();									// Validate input with helper function
 			}
 
 			if (testPerfect(perfectNumber, userRequest))					// Test for perfection
@@ -36,21 +37,8 @@ public class perfectNumbers
 				printFactors(perfectNumber, false);							// If not perfect, print sorry message
 			
 			numDone++;           											// Iterate until count is exhausted
-        }
-     }
-
-	public static int getValue () 											// Scan for user input and validate an Int
-	{										
-        Scanner get = new Scanner(System.in);	
-        int userInput = -1;
-
-        if (get.hasNextInt())
-            userInput = get.nextInt();
-        else 
-            get.next();
-
-        return userInput;													// Return value, -1 if value was not an int
-    }
+    	}
+    } 
 
     public static boolean testPerfect(int perfectNumber, int userRequest)
     {

@@ -8,6 +8,7 @@ public class shapeSize {
     public static void main (String[] args){ 
         String questions[][] = new String[4][3];
 		double answers[][] = new double[4][3];
+		inputHelpers helpers = new inputHelpers();      // Helper class to validate input
 
 		questions[0][0] = "Please enter the length of a side of your square: ";
 		questions[0][1] = "Area of your square is:";
@@ -26,16 +27,16 @@ public class shapeSize {
 			
 			switch (i) {
 				case 0:
-					answers[0][0] = getValue();
+					answers[0][0] = helpers.getDoubleInput();
 					answers[0][0]  = Math.pow(answers[0][0], 2);
 					break;
 				case 1:
-					answers[1][0] = getValue();	
+					answers[1][0] = helpers.getDoubleInput();
 					answers[1][1] = 6.0 * Math.pow(answers[1][0], 2);
 					answers[1][0] = Math.pow(answers[1][0], 3);
 					break;
 				case 2:
-					answers[2][0] = getValue();
+					answers[2][0] = helpers.getDoubleInput();
 					answers[2][0] = Math.PI * Math.pow(answers[2][0], 2);
 					break;
 				case 3:
@@ -62,19 +63,6 @@ public class shapeSize {
 			}
 			System.out.print("\n");
 		} 
-	}
-
-	public static double getValue () {
-		Scanner get = new Scanner (System.in);
-		double userInput = -1;
-
-		while (userInput < 1 || userInput > 1000) {	
-			if (get.hasNextDouble())
-				userInput = get.nextDouble();
-			else
-				get.next();
-		}
-		return userInput;
 	}
 
 	public static double[] getString () {

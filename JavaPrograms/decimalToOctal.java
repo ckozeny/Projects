@@ -6,18 +6,12 @@ public class decimalToOctal {
          public static void main( String args[] ) {
 			Scanner get = new Scanner( System.in );
             int userRequest = -1;							// Variable for user input 
-        	
+        	inputHelpers helpers = new inputHelpers();		// Helper class to validate input
+			
 			while(userRequest < 0 || userRequest > 2097151) // Within this range or prompt again
 			{
 				System.out.print ("\nPlease enter a number from 0 to 2097151 to convert: ");
-            	
-				if (get.hasNextInt())
-            	{                                   		// Get input and validate that it is within constraints
-                	userRequest = get.nextInt();
-            	} else
-            	{
-                	get.next();
-            	}
+				userRequest = helpers.getIntInput();	
 			}
 		
 			System.out.printf  ("\033[3m\n  The decimal number you entered, %d, is \033[0m", userRequest); 

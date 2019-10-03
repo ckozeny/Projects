@@ -5,8 +5,9 @@ import java.util.Scanner;
 
 public class multiples {
  	public static void main( String args[] ) {
-		int number[] = new int[2];				// To hold the 2 user input numbers		
- 		number[0] = number[1] = -1;				// Default values
+		int number[] = new int[2];							// To hold the 2 user input numbers		
+ 		inputHelpers helpers = new inputHelpers();      	// Helper class to validate input
+		number[0] = number[1] = -1;							// Default values
 
 		System.out.println("");					// Main Menu
 		System.out.println("Hello! Below, please input two numbers. This program"
@@ -21,14 +22,12 @@ public class multiples {
 					turn = " second ";
 
 				System.out.print ("\tPlease enter a" + turn + "number: ");
-    			number[j] = tryIntInput();		// Get input and validate it
+    			number[j] = helpers.getIntInput();		// Get input and validate it
 				
-				if (number[0] == -1) {			// Bad value input for number[0]
-					incorrectInput();	
+				if (number[0] == -1) {			// Bad value input for number[0]	
 					break;
 				} else if (number[1] == -1 && j == 1) {		// Bad value input for number[1]
-					j = 0;									// Loop will continue at j = 1 and ask again
-					incorrectInput();					
+					j = 0;									// Loop will continue at j = 1 and ask again					
 					continue;
 				}
 			}
@@ -50,22 +49,5 @@ public class multiples {
 		}
 	
 		System.out.println("\n");
-	}
-	
-	public static int tryIntInput() {                   // Test that input values are integers
-            Scanner get = new Scanner(System.in);
-            int userRequest = -1;
-
-            if (get.hasNextInt()) {
-                userRequest = get.nextInt();            // Get input and validate that it is within constraints
-            } else
-                get.next();
-
-            return userRequest;                         // Return result or -1 for bad input
-    }
-	
-	public static void incorrectInput() {				// Global function for input error message
-		System.out.print("Incorrect input. Please try again.\n");
-	}
-
+	}	
 }        

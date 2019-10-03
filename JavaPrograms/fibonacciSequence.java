@@ -11,16 +11,12 @@ public class fibonacciSequence
 	{
         Scanner get = new Scanner(System.in);				// Create new scanner			
         int userRequest = 0;								// Integer for user input
+		inputHelpers helpers = new inputHelpers();      	// Helper class to validate input	
         
 		while(userRequest < 1 || userRequest > 70) 			// Only accept within this range
 		{
             System.out.print("\nPlease choose a Fibonacci number you would like to know (1-70): ");
-        	
-			if (get.hasNextInt()) {				// Get input and validate that it is within constraints
-				userRequest = get.nextInt();
-			} else {
-    			get.next();
-			}    
+ 			userRequest = helpers.getIntInput();       	
         }
 		
 		// Final print statement with a call to the legwork function
