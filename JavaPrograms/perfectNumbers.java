@@ -6,33 +6,42 @@ public class perfectNumbers
 {
     public static void main(String [] args)
     {
-        Scanner input = new Scanner(System.in);
-        int userRequest, perfectNumber, numDone;
+        int userRequest, perfectNumber, numDone;							// Initialize input and counter variables
 		userRequest = numDone = 0;
 		perfectNumber = -1;
+		
+		System.out.println("\nHello! This program takes your input and confirms"
+							+ "\nwhether it is a perfect number or not. A perfect"
+							+ "\nnumber exists when all of its multiples add up"
+							+ "\nto the number itself. (ex: 1 + 2 + 3 = 6)\n");
 
-        while (userRequest < 1 || userRequest > 25) 
+        while (userRequest < 1 || userRequest > 25) 						// Input is within bounds
 		{ 
-			System.out.print("How many numbers would you like to test?:");
-			userRequest = getValue();
+			System.out.print("\tHow many numbers would you like to try (1-25)?: ");
+			userRequest = getValue();										// Validate input with helper function
 		}
 		
-		while (numDone < userRequest)
+		while (numDone < userRequest)										// Loop as many times as the user requests
         {	
 			perfectNumber = -1;
-			while (perfectNumber < 0 || perfectNumber > 10000)
+			while (perfectNumber < 0 || perfectNumber > 10000)				// Input is within bounds
 			{
-				System.out.print("Enter a number you would like to test: ");
-        		perfectNumber = getValue();
+				System.out.print("\n\tEnter the number you would like to try (1-10000): ");
+        		perfectNumber = getValue();									// Validate input with helper function
 			}
-			testPerfect(perfectNumber, userRequest);
-            printFactors(perfectNumber);  
-			numDone++;           
+
+			if (testPerfect(perfectNumber, userRequest))					// Test for perfection
+            	printFactors(perfectNumber, true);  						// If perfect, print factors
+			else
+				printFactors(perfectNumber, false);							// If not perfect, print sorry message
+			
+			numDone++;           											// Iterate until count is exhausted
         }
      }
 
-	public static int getValue () {
-        Scanner get = new Scanner (System.in);
+	public static int getValue () 											// Scan for user input and validate an Int
+	{										
+        Scanner get = new Scanner(System.in);	
         int userInput = -1;
 
         if (get.hasNextInt())
@@ -40,51 +49,43 @@ public class perfectNumbers
         else 
             get.next();
 
-        return userInput;
+        return userInput;													// Return value, -1 if value was not an int
     }
 
     public static boolean testPerfect(int perfectNumber, int userRequest)
     {
         int sum = 0;                                 
-        for(int value = 1; value < userRequest; value++){
-            if(perfectNumber % value == 0) 
+        for(int value = 1; value <= (perfectNumber / 2); value++)			// Lowest divisor will be 2, only half iterations needed
+		{
+            if(perfectNumber % value == 0) 									// Test that all divisors add up to total
                 sum += value;
         }
 
         if(sum == perfectNumber)
-            return true;
+            return true;													// Perfect number
         else
-            return false;
+            return false;													// Not perfect
     }
 
-    public static void printFactors(int perfectNumber)
-    {
-        int divide;
-        int sum = 0;
+    public static void printFactors(int perfectNumber, boolean perfect)
+    {  
+		if(!perfect)
+            System.out.printf("\n\t\tSorry, but %d is not a perfect number.\n\n", perfectNumber);
 
-        for(int factor = (perfectNumber - 1); factor > 0; factor--)
+        if(perfect)										
         {
-            if(perfectNumber % factor == 0)
-            	sum = sum + factor;
-        }
-        
-		if(sum != perfectNumber)
-            System.out.printf("\n\tSorry, but %d is not a perfect number.\n\n", perfectNumber);
+            System.out.printf("\n\t\tSuccess! %d is a perfect number.\n\t\tThe factors are:\n\t\t\t ", perfectNumber);
 
-        if(sum == perfectNumber)
-        {
-            System.out.printf("\n\tSuccess! %d is a perfect number.\n\tThe factors are:\n\t\t ", perfectNumber);
-
-            for(int factor = 1; factor < perfectNumber; factor++)
+            for(int factor = 1; factor <= (perfectNumber / 2); factor++)
             {
-                if (perfectNumber % factor == 0)
+                if (perfectNumber % factor == 0)							// If its a clean multiple, print it
                 {    
 					System.out.printf("%d", factor);
 				
-					if (perfectNumber / 2 == factor)					// The last possible factor
-						System.out.printf(" = %d\n\n", perfectNumber);
+					if (perfectNumber / 2 == factor)						// The last possible factor
+						System.out.printf(" = %d\n", perfectNumber);
 					else
-						System.out.print(" + "); 
+						System.out.print(" + "); 							// Between factors for output
             	}
 			}
         }
